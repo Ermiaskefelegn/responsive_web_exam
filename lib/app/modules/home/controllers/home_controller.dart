@@ -8,7 +8,7 @@ class HomeController extends GetxController {
   final count = 0.obs;
   var isloading = false.obs;
   var producslist = List<Item>.of([]).obs;
-
+  var searchitemslist = List<Item>.of([]).obs;
   @override
   void onInit() {
     super.onInit();
@@ -17,6 +17,7 @@ class HomeController extends GetxController {
 
   Future<Products> getAllProducts() async {
     try {
+      searchitemslist.clear();
       isloading(true);
       var url = Uri.parse(
           "https://1hia8orbrk.execute-api.us-east-1.amazonaws.com/prod/products");
@@ -25,7 +26,8 @@ class HomeController extends GetxController {
       if (response.statusCode == 200) {
         final Products allitemsbycategory = productsFromJson(response.body);
         producslist.value = allitemsbycategory.items!;
-        print("categories data $producslist");
+        searchitemslist.value = allitemsbycategory.items!;
+        print("categories data ${producslist[0].title!.s}");
         isloading(false);
         return allitemsbycategory;
       } else {
